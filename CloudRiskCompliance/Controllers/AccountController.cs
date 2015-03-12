@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System.Reflection;
+using System.Net;
 
 namespace CloudRiskCompliance.Controllers
 {
@@ -20,14 +21,17 @@ namespace CloudRiskCompliance.Controllers
         private readonly IAuthenticationManager _authenticationManager;
         private readonly IApplicationSignInManager _signInManager;
         private readonly IApplicationUserManager _userManager;
+        private readonly IApplicationRoleManager _roleManager;
         private readonly ILogger _logger;
 
         public AccountController(IApplicationUserManager userManager,
+                                 IApplicationRoleManager roleManager,
                                  IApplicationSignInManager signInManager,
                                  IAuthenticationManager authenticationManager, 
                                  ILogger logger)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _signInManager = signInManager;
             _authenticationManager = authenticationManager;
             _logger = logger;
@@ -245,6 +249,46 @@ namespace CloudRiskCompliance.Controllers
             return View();
         }
 
+        // POST: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<HttpStatusCodeResult> RegisterAdmin(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                const string roleName = "Admin";
+
+                //Create Role Admin if it does not exist
+                var role = _roleManager.FindRoleByName(roleName);
+                if (role == null)
+                {
+                    role = new CustomRole(roleName);
+                    var roleresult = _roleManager.CreateRole(role);
+                }
+
+                var adminUser = new ApplicationUser { UserName = string.Format("{0}_{1}", model.Username, model.CompanyId), DisplayName = model.Username, Email = model.Email, CompanyId = model.CompanyId };
+                var result = await _userManager.CreateAsync(adminUser, model.Password);
+
+                //var user = _userManager.FindByNameAsync(model.Username);
+                //if (user == null)
+                //{
+
+
+                //}
+
+                // Add user admin to Role Admin if not already added
+                bool rolesForUser = _userManager.IsInRoleAsync(adminUser.Id, roleName).Result;
+                if (!rolesForUser)
+                {
+                    var resultAddRole = _userManager.AddToRoleAsync(adminUser.Id, roleName);
+                }
+
+                return new HttpStatusCodeResult(HttpStatusCode.OK);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+        }
         //
         // POST: /Account/Register
         [HttpPost]
