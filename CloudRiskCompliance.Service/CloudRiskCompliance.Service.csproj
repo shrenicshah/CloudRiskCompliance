@@ -96,6 +96,7 @@
     <Compile Include="CustomRoleStore.cs" />
     <Compile Include="CustomUserStore.cs" />
     <Compile Include="CategoryService.cs" />
+    <Compile Include="CustomUserValidator.cs" />
     <Compile Include="ProductService.cs" />
     <Compile Include="EmailService.cs" />
     <Compile Include="Contracts\IApplicationRoleManager.cs" />

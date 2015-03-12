@@ -5,6 +5,14 @@ namespace CloudRiskCompliance.Models
     public class RegisterViewModel
     {
         [Required]
+        [Display(Name = "Company Name")]
+        public string CompanyId { get; set; }
+
+        [Required]
+        [Display(Name = "Username")]
+        public string Username { get; set; }
+
+        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }

@@ -87,6 +87,7 @@ namespace CloudRiskCompliance.IocConfig
                 //config.For<IDataProtectionProvider>().Use(()=> app.GetDataProtectionProvider()); // In Startup class
 
                 ioc.For<ICategoryService>().Use<CategoryService>();
+
                 ioc.For<IProductService>().Use<ProductService>();
             });
         }

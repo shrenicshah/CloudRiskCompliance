@@ -15,21 +15,21 @@ namespace CloudRiskCompliance.DataLayer.Context
         public DbSet<Address> Addresses { set; get; }
 
         public ApplicationDbContext()
-            : base(GetConnectionString())
+            : base("connectionString")
         {
         }
 
-        private static string GetConnectionString()
-        {
-            string host = System.Web.HttpContext.Current.Request.Headers["Host"];
-            int portNumberIndex = host.LastIndexOf(':');
-            if (portNumberIndex > 0)
-            {
-                host = host.Substring(0, portNumberIndex);
-            }
+        //private static string GetConnectionString()
+        //{
+        //    string host = System.Web.HttpContext.Current.Request.Headers["Host"];
+        //    int portNumberIndex = host.LastIndexOf(':');
+        //    if (portNumberIndex > 0)
+        //    {
+        //        host = host.Substring(0, portNumberIndex);
+        //    }
 
-            return string.Format(@"Data Source=DEVPC-PC\SQLEXPRESS;Initial Catalog={0};Integrated Security=true", host);
-        }
+        //    return string.Format(@"Data Source=DEVPC-PC\SQLEXPRESS;Initial Catalog={0};Integrated Security=true", host);
+        //}
 
         protected override void OnModelCreating(DbModelBuilder builder)
         {

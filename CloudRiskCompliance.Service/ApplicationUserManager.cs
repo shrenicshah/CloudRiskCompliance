@@ -95,8 +95,14 @@ namespace CloudRiskCompliance.ServiceLayer
 
         private void CreateApplicationUserManager()
         {
-            // Configure validation logic for usernames
-            this.UserValidator = new UserValidator<ApplicationUser, int>(this)
+            //// Configure validation logic for usernames
+            //this.UserValidator = new UserValidator<ApplicationUser, int>(this)
+            //{
+            //    AllowOnlyAlphanumericUserNames = false,
+            //    RequireUniqueEmail = true
+            //};
+
+            this.UserValidator = new CustomUserValidator(this)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
